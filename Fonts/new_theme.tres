@@ -1,0 +1,10 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://cx5ipn4nbsf3m"]
+
+[ext_resource type="FontFile" uid="uid://clohtar75x8uq" path="res://Fonts/Kreon/static/Kreon-Regular.ttf" id="1_8slnm"]
+
+[resource]
+default_font = ExtResource("1_8slnm")
+default_font_size = 32
+Label/colors/font_shadow_color = Color(0, 0, 0, 0.411765)
+Label/constants/shadow_offset_x = 2
+Label/constants/shadow_offset_y = 3
