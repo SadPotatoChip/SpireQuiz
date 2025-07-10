@@ -59,6 +59,11 @@ public partial class SoundQueue : Node
 			player.Stream = stream;
 		}
 	}
+
+	public void Play()
+	{
+		PlaySound();
+	}
 	
 	public int PlaySound(AudioStream sound = null, float? overridePitchShift = null)
 	{
