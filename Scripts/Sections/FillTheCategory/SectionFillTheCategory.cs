@@ -49,6 +49,7 @@ public partial class SectionFillTheCategory: Section
 
 	public async void ValidateButtonPressed()
 	{
+		GameTimer.Instance.Stop();
 		var correctAnswers = CurrentQuestion.Answers;
 		for (int i = 0; i < correctAnswers.Count; i++)
 		{

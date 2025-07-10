@@ -32,7 +32,7 @@ public partial class GameInformation : Control
 		{
 			var current = int.Parse(field.Text);
 			field.Text = (current + n).ToString();
-			var plonk = SFXFactory.Instance.CreatePlonkText((n > 0 ? "+" : "") + n, field.GlobalPosition + Vector2.Right * 150, Colors.White);
+			var plonk = SFXFactory.Instance.CreatePlonkText((n > 0 ? "+" : "") + n, field.GlobalPosition + Vector2.Right * 150, Colors.Yellow);
 			plonk.FloatUp(50, 3f);
 		}
 		catch

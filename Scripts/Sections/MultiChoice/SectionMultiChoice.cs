@@ -69,6 +69,7 @@ public partial class SectionMultiChoice : Section
 
 	public async void AnswerPressed(int index)
 	{
+		GameTimer.Instance.Stop();
 		await GameTimeFlow.Stop(200);
 		DrumRollSound.PlaySound();
 		var correct = index == CurrentQuestion.CorrectAnswer;

@@ -596,6 +596,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="SectionGuessNumber" type="Control" parent="Camera2D/Game" node_paths=PackedStringArray("AnswerBlueTextEdit", "AnswerRedTextEdit", "ResultLabel", "FinishAniticpationSound", "StartAniticpationSound", "RulesLabel", "QuestionLabel", "NowGuessingLabel")]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

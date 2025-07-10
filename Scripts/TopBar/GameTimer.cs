@@ -79,7 +79,7 @@ public partial class GameTimer : Control
 		}
 		else
 		{
-			TimerText.Text = (s/60) +":"+ (s%60);
+			TimerText.Text = (s/60) +":"+ (s%60<10?"0":"")+ (s%60);
 		}
 		
 	}

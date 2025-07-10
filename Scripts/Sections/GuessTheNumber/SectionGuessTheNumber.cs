@@ -44,6 +44,7 @@ public partial class SectionGuessTheNumber: Section
 
 	public async void OnSubmitButtonPressed()
 	{
+		GameTimer.Instance.Stop();
 		var lerp = 0.0033f;
 		var limit = (int)(1 / lerp);
 		StartAniticpationSound.PlaySound();
