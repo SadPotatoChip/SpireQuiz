@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using SpireKnight.Scripts.Audio;
@@ -45,8 +45,8 @@ public partial class EAController : Node2D
 			}
 
 			if (anim.IsStopped 
-			    || anim.TotalDuration <= delta
-			    || anim.TotalDuration <= anim.Time)
+				|| anim.TotalDuration <= delta
+				|| anim.TotalDuration <= anim.Time)
 			{
 				FinishedAnimationsThisFrame.Add(node);
 			}

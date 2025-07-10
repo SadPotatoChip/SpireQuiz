@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Godot;
 using SpireKnight.Scripts.Audio;
+using SpireKnight.Scripts.VisualFlair;
+using SpireQuiz.Scripts.TopBar;
 
 namespace SpireQuiz.Scripts.Sections.MultiChoice;
 
@@ -10,6 +12,7 @@ public partial class SectionMultiChoice : Section
 	public override SectionType SectionType { get; set; } = SectionType.MultiChoiceQuestions;
 
 	[Export] private RichTextLabel QuestionLabel;
+	[Export] private RichTextLabel NowGuessingLabel;
 	[Export] private TextureButton[] AnswerButtons;
 	[Export] private SoundQueue DrumRollSound;
 	[Export] private SoundQueue CorrectSound;
@@ -22,8 +25,18 @@ public partial class SectionMultiChoice : Section
 
 	private const int POINT_REWARD = 4;
 	private const int POINT_REWARD_OTHER = 2;
+	private int CurrentReward;
 
-	private TeamColor NowGuessing;
+	private TeamColor _nowGuessing;
+
+	private TeamColor NowGuessing
+	{
+		get => _nowGuessing;
+		set {
+			_nowGuessing = value;
+			NowGuessingLabel.Text = $"Now Guessing: [color=#{Teams.ColorForTeam[value]}]{value}[/color]";
+		}
+	}
 	private int QuestionIndex;
 	private MultiChoiceQuestion CurrentQuestion;
 	
@@ -49,7 +62,9 @@ public partial class SectionMultiChoice : Section
 			await End();
 			return;
 		}
-		
+
+		NowGuessing = QuestionIndex % 2 == 0 ? TeamColor.Blue : TeamColor.Red;
+		CurrentReward = POINT_REWARD;
 		CurrentQuestion = MultiChoiceQuestion.AllQuestions[QuestionIndex];
 		QuestionLabel.Text = CurrentQuestion.Text;
 		for (int i = 0; i < CurrentQuestion.Answers.Count; i++)
@@ -79,6 +94,10 @@ public partial class SectionMultiChoice : Section
 		await GameTimeFlow.Stop(2000);
 		CorrectSound.PlaySound();
 		btn.SelfModulate = new Color(0, 1, 0);
+		var plonk = SFXFactory.Instance.CreatePlonkText("Correct!", btn.GlobalPosition + Vector2.Up*50 + Vector2.Right * 450, Colors.Green);
+		plonk.FloatUp();
+		await GameInformation.Instance.GiveScore(NowGuessing, CurrentReward);
+		
 		await GameTimeFlow.Stop(2000);
 		await TryLoadNextQuestion();
 	}
@@ -88,5 +107,18 @@ public partial class SectionMultiChoice : Section
 		await GameTimeFlow.Stop(2000);
 		IncorrectSound.PlaySound();
 		btn.SelfModulate = new Color(1, 0, 0);
+		var plonk = SFXFactory.Instance.CreatePlonkText("WRONG!", btn.GlobalPosition + Vector2.Up*50+ Vector2.Right * 450, Colors.Red);
+		plonk.FloatUp();
+		
+		if (CurrentReward == POINT_REWARD)
+		{
+			CurrentReward = POINT_REWARD_OTHER;
+			NowGuessing = Teams.Other(NowGuessing);
+		}
+		else
+		{
+			await GameTimeFlow.Stop(2000);
+			await TryLoadNextQuestion();
+		}
 	}
 }

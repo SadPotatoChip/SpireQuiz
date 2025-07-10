@@ -8,6 +8,7 @@ public partial class Game : Node2D
 	public static Game Instance;
 
 	[Export] public SectionPicker SectionPicker;
+	[Export] public AudioStreamPlayer Music;
 	
 	public override void _Ready()
 	{

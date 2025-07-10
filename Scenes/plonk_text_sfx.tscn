@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://gxrbhsyundea"]
+
+[ext_resource type="Script" uid="uid://cck0502mahnxj" path="res://Scripts/VisualFlair/Instances/PlonkText/PlonkTextController.cs" id="1_m2n0e"]
+[ext_resource type="Theme" uid="uid://cx5ipn4nbsf3m" path="res://Fonts/new_theme.tres" id="2_oa73c"]
+
+[sub_resource type="RichTextEffect" id="RichTextEffect_kso7m"]
+
+[node name="PlonkTextSFX" type="Node2D" node_paths=PackedStringArray("Label", "RB")]
+z_index = 50
+script = ExtResource("1_m2n0e")
+Label = NodePath("VisualsRB/Label")
+RB = NodePath("VisualsRB")
+
+[node name="VisualsRB" type="RigidBody2D" parent="."]
+sleeping = true
+freeze = true
+
+[node name="Label" type="RichTextLabel" parent="VisualsRB"]
+clip_contents = false
+offset_left = -95.0
+offset_top = -19.0
+offset_right = 95.0
+offset_bottom = 29.0
+mouse_filter = 2
+theme = ExtResource("2_oa73c")
+theme_override_font_sizes/normal_font_size = 36
+bbcode_enabled = true
+text = "[center]+3 XP[/center]"
+scroll_active = false
+autowrap_mode = 0
+custom_effects = [SubResource("RichTextEffect_kso7m")]

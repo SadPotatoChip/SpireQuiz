@@ -12,7 +12,7 @@ dest_files=["res://.godot/imported/STS_MenuTheme_NewMix_v1.ogg-c70be688e7a2c9484
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
 bpm=0
 beat_count=0
