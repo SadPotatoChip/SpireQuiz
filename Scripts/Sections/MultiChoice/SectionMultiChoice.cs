@@ -16,6 +16,8 @@ public partial class SectionMultiChoice : Section
 	[Export] private SoundQueue DrumRollSound;
 	[Export] private SoundQueue CorrectSound;
 	[Export] private SoundQueue IncorrectSound;
+	[Export] private TextureButton StartButton;
+
 	
 	protected override string Rules =>
 		"Teams take turns answering questions. You have 2 minutes to discuss before giving a final answer.\n" +

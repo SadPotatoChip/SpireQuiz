@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Godot;
+using SpireKnight.Scripts.Audio;
 using SpireKnight.Scripts.VisualFlair;
 using SpireQuiz.Scripts.TopBar;
 
@@ -25,6 +27,8 @@ public partial class SectionFillTheCategory: Section
 	[Export] private TextEdit AnswerTextEdit;
 	[Export] private RichTextLabel ResultLabel;
 	[Export] private RichTextLabel OutputLabel;
+	[Export] private SoundQueue CorrectSound;
+	[Export] private SoundQueue WrongSound;
 
 	#endregion
 	
@@ -34,15 +38,8 @@ public partial class SectionFillTheCategory: Section
 	{
 		Visible = true;
 		RulesLabel.Text = Rules;
-		StartButton.Visible = true;
-	}
-	
-	public async void StartButtonPressed()
-	{
-		StartButton.Visible = false;
 		QuestionIndex = -1;
 		CurrentQuestion = null;
-		await TryLoadNextQuestion();
 	}
 
 	public async void NextQButtonPressed()
@@ -63,7 +60,6 @@ public partial class SectionFillTheCategory: Section
 
 		var answers = AnswerTextEdit.Text.Split(",")
 			.Where( s=> false == string.IsNullOrWhiteSpace(s));
-		var outputText = "";
 		foreach (var a in answers)
 		{
 			var s = a;
@@ -71,16 +67,25 @@ public partial class SectionFillTheCategory: Section
 			{
 				correct++;
 				s = s.RichWrapColor(Colors.Green);
+				CorrectSound.PlaySound();
+				var plonk = SFXFactory.Instance.CreatePlonkText("Correct!",
+					OutputLabel.GlobalPosition + Vector2.Right * (800 + new Random().Next(400)), Colors.Green);
+				plonk.FloatUp();
 			}
 			else
 			{
 				incorrect++;
 				s = s.RichWrapColor(Colors.Red);
+				WrongSound.PlaySound();
+				var plonk = SFXFactory.Instance.CreatePlonkText("Wrong!",
+					OutputLabel.GlobalPosition + Vector2.Right * (800 + new Random().Next(400)), Colors.Red);
+				plonk.FloatUp();
 			}
-			outputText += s + ", ";
+			OutputLabel.Text = OutputLabel.Text + s + ", ";
+			await GameTimeFlow.Stop(800);
 		}
-		OutputLabel.Text = outputText;
-		ResultLabel.Text = $"[color=#00ff00]Correct: {correct * CORRECT_POINTS}[/color] [color=#ff0000]Incorrect: {incorrect * INCORRECT_POINTS}[/color]";
+		
+		ResultLabel.Text = $"[color=#00ff00]Correct: {correct}x{CORRECT_POINTS}[/color] [color=#ff0000]Incorrect: {incorrect}[/color]";
 
 		await GameInformation.Instance.GiveScore(NowGuessing, correct * CORRECT_POINTS + incorrect * INCORRECT_POINTS);
 	}

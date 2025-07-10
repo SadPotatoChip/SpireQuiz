@@ -156,7 +156,7 @@ theme = ExtResource("3_feb5d")
 theme_override_font_sizes/normal_font_size = 25
 horizontal_alignment = 1
 
-[node name="SectionMultiChoice" type="Control" parent="Camera2D/Game" node_paths=PackedStringArray("AnswerButtons", "DrumRollSound", "CorrectSound", "IncorrectSound", "RulesLabel", "QuestionLabel", "NowGuessingLabel", "StartButton")]
+[node name="SectionMultiChoice" type="Control" parent="Camera2D/Game" node_paths=PackedStringArray("AnswerButtons", "DrumRollSound", "CorrectSound", "IncorrectSound", "StartButton", "RulesLabel", "QuestionLabel", "NowGuessingLabel")]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -169,10 +169,10 @@ AnswerButtons = [NodePath("TextureButton"), NodePath("TextureButton2"), NodePath
 DrumRollSound = NodePath("Audio/DrumRoll")
 CorrectSound = NodePath("Audio/Ding")
 IncorrectSound = NodePath("Audio/Wrong")
+StartButton = NodePath("BeginButton")
 RulesLabel = NodePath("../Rules")
 QuestionLabel = NodePath("Question")
 NowGuessingLabel = NodePath("NowGuessing")
-StartButton = NodePath("BeginButton")
 
 [node name="Audio" type="Node" parent="Camera2D/Game/SectionMultiChoice"]
 
@@ -403,7 +403,7 @@ theme = ExtResource("3_feb5d")
 theme_override_font_sizes/normal_font_size = 40
 text = "Begin!"
 
-[node name="SectionFillTheCategory" type="Control" parent="Camera2D/Game" node_paths=PackedStringArray("AnswerTextEdit", "ResultLabel", "OutputLabel", "RulesLabel", "QuestionLabel", "NowGuessingLabel", "StartButton")]
+[node name="SectionFillTheCategory" type="Control" parent="Camera2D/Game" node_paths=PackedStringArray("AnswerTextEdit", "ResultLabel", "OutputLabel", "CorrectSound", "WrongSound", "RulesLabel", "QuestionLabel", "NowGuessingLabel")]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -415,20 +415,13 @@ script = ExtResource("30_dhpj7")
 AnswerTextEdit = NodePath("Guesses")
 ResultLabel = NodePath("ResultLabel")
 OutputLabel = NodePath("Output")
+CorrectSound = NodePath("Audio/Ding")
+WrongSound = NodePath("Audio/Wrong")
 RulesLabel = NodePath("../Rules")
 QuestionLabel = NodePath("Question")
 NowGuessingLabel = NodePath("NowGuessing")
-StartButton = NodePath("BeginButton")
 
 [node name="Audio" type="Node" parent="Camera2D/Game/SectionFillTheCategory"]
-
-[node name="DrumRoll" type="Node" parent="Camera2D/Game/SectionFillTheCategory/Audio"]
-script = ExtResource("6_hve3p")
-Count = 2
-PitchShift = 0.2
-
-[node name="Sound" type="AudioStreamPlayer" parent="Camera2D/Game/SectionFillTheCategory/Audio/DrumRoll"]
-stream = ExtResource("21_f1jbl")
 
 [node name="Ding" type="Node" parent="Camera2D/Game/SectionFillTheCategory/Audio"]
 script = ExtResource("6_hve3p")
@@ -447,7 +440,7 @@ PitchShift = 0.2
 stream = ExtResource("23_xa8c5")
 
 [node name="Question" type="RichTextLabel" parent="Camera2D/Game/SectionFillTheCategory"]
-custom_minimum_size = Vector2(0, 120)
+custom_minimum_size = Vector2(0, 160)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -509,37 +502,6 @@ theme = ExtResource("3_feb5d")
 theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 horizontal_alignment = 1
-
-[node name="BeginButton" type="TextureButton" parent="Camera2D/Game/SectionFillTheCategory"]
-layout_mode = 0
-offset_left = 1388.0
-offset_top = 337.0
-offset_right = 1644.0
-offset_bottom = 593.0
-texture_normal = ExtResource("30_082n1")
-texture_hover = ExtResource("31_xex6t")
-
-[node name="PressedSoundQue" type="Node" parent="Camera2D/Game/SectionFillTheCategory/BeginButton"]
-script = ExtResource("6_hve3p")
-Count = 2
-PitchShift = 0.2
-
-[node name="Pressed" type="AudioStreamPlayer" parent="Camera2D/Game/SectionFillTheCategory/BeginButton/PressedSoundQue"]
-stream = ExtResource("23_qhcbd")
-
-[node name="Answer" type="RichTextLabel" parent="Camera2D/Game/SectionFillTheCategory/BeginButton"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 81.0
-offset_top = 99.0
-offset_right = 68.0
-offset_bottom = 162.0
-grow_horizontal = 2
-mouse_filter = 2
-theme = ExtResource("3_feb5d")
-theme_override_font_sizes/normal_font_size = 40
-text = "Begin!"
 
 [node name="ResultLabel" type="RichTextLabel" parent="Camera2D/Game/SectionFillTheCategory"]
 layout_mode = 1
@@ -890,8 +852,6 @@ expand_icon = true
 [connection signal="pressed" from="Camera2D/Game/SectionMultiChoice/BeginButton" to="Camera2D/Game/SectionMultiChoice" method="StartButtonPressed"]
 [connection signal="pressed" from="Camera2D/Game/SectionMultiChoice/BeginButton" to="Camera2D/Game/SectionMultiChoice/BeginButton/PressedSoundQue" method="Play"]
 [connection signal="pressed" from="Camera2D/Game/SectionFillTheCategory/Exit" to="Camera2D/Game/SectionFillTheCategory" method="ForceEnd"]
-[connection signal="pressed" from="Camera2D/Game/SectionFillTheCategory/BeginButton" to="Camera2D/Game/SectionFillTheCategory" method="StartButtonPressed"]
-[connection signal="pressed" from="Camera2D/Game/SectionFillTheCategory/BeginButton" to="Camera2D/Game/SectionFillTheCategory/BeginButton/PressedSoundQue" method="Play"]
 [connection signal="pressed" from="Camera2D/Game/SectionFillTheCategory/ValidateButton" to="Camera2D/Game/SectionFillTheCategory" method="ValidateButtonPressed"]
 [connection signal="pressed" from="Camera2D/Game/SectionFillTheCategory/ValidateButton" to="Camera2D/Game/SectionFillTheCategory/ValidateButton/PressedSoundQue" method="Play"]
 [connection signal="pressed" from="Camera2D/Game/SectionFillTheCategory/NextQButton" to="Camera2D/Game/SectionFillTheCategory" method="NextQButtonPressed"]

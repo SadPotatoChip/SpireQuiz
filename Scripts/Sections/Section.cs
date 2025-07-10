@@ -8,7 +8,6 @@ public abstract partial class Section : Control
 	[Export] protected RichTextLabel RulesLabel;
 	[Export] protected RichTextLabel QuestionLabel;
 	[Export] protected RichTextLabel NowGuessingLabel;
-	[Export] protected TextureButton StartButton;
 	public abstract SectionType SectionType { get; set; }
 	protected abstract string Rules { get; }
 	
