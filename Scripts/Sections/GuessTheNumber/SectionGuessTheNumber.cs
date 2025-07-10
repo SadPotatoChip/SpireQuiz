@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Godot;
+using SpireKnight.Scripts.Audio;
+using SpireKnight.Scripts.VisualFlair;
 using SpireQuiz.Scripts.Sections.FillTheCategory;
 using SpireQuiz.Scripts.TopBar;
 
@@ -25,6 +27,8 @@ public partial class SectionGuessTheNumber: Section
 	[Export] private TextEdit AnswerBlueTextEdit;
 	[Export] private TextEdit AnswerRedTextEdit;
 	[Export] private RichTextLabel ResultLabel;
+	[Export] private SoundQueue FinishAniticpationSound;
+	[Export] private SoundQueue StartAniticpationSound;
 
 	#endregion
 	
@@ -38,8 +42,21 @@ public partial class SectionGuessTheNumber: Section
 		CurrentQuestion = null;
 	}
 
-	public async void OnCalculateButtonPressed()
+	public async void OnSubmitButtonPressed()
 	{
+		var lerp = 0.0033f;
+		var limit = (int)(1 / lerp);
+		StartAniticpationSound.PlaySound();
+		for (int percent = 0; percent < limit; percent++)
+		{
+			var floatPercent = percent * lerp;
+			var at = easeOutCubic(floatPercent);
+			ResultLabel.Text = ((int)(at * CurrentQuestion.Answer)).ToString();
+			await GameTimeFlow.Stop(5);
+		}
+		ResultLabel.Text = CurrentQuestion.Answer.ToString();
+		FinishAniticpationSound.PlaySound();
+		
 		var blueAnswer = int.Parse(AnswerBlueTextEdit.Text);
 		var redAnswer = int.Parse(AnswerRedTextEdit.Text);
 
@@ -49,15 +66,23 @@ public partial class SectionGuessTheNumber: Section
 		if (blueDiff == redDiff)
 		{
 			await GameInformation.Instance.GiveScore(TeamColor.Red, CLOSER_POINTS);
-			await GameInformation.Instance.GiveScore(TeamColor.Red, CLOSER_POINTS);
+			await GameInformation.Instance.GiveScore(TeamColor.Blue, CLOSER_POINTS);
+			var plonk = SFXFactory.Instance.CreatePlonkText("Draw!", AnswerBlueTextEdit.GlobalPosition, Colors.Yellow);
+			plonk.FloatUp();
+			var plonk2 = SFXFactory.Instance.CreatePlonkText("Draw!", AnswerRedTextEdit.GlobalPosition, Colors.Yellow);
+			plonk2.FloatUp();
 		}
 		else if (blueDiff < redDiff)
 		{
 			await GameInformation.Instance.GiveScore(TeamColor.Blue, CLOSER_POINTS);
+			var plonk = SFXFactory.Instance.CreatePlonkText("WIN!", AnswerBlueTextEdit.GlobalPosition, Colors.Green);
+			plonk.FloatUp();
 		}
 		else
 		{
 			await GameInformation.Instance.GiveScore(TeamColor.Red, CLOSER_POINTS);
+			var plonk = SFXFactory.Instance.CreatePlonkText("WIN!", AnswerRedTextEdit.GlobalPosition, Colors.Green);
+			plonk.FloatUp();
 		}
 
 		await GameTimeFlow.Stop(500);
@@ -71,6 +96,11 @@ public partial class SectionGuessTheNumber: Section
 		}
 	}
 
+	public async void OnNextQuestionButtonPressed()
+	{
+		await TryLoadNextQuestion();
+	}
+	
 	private async Task TryLoadNextQuestion()
 	{
 		QuestionIndex++;
@@ -82,10 +112,16 @@ public partial class SectionGuessTheNumber: Section
 		CurrentQuestion = GuessTheNumberQuestion.AllQuestions[QuestionIndex];
 		QuestionLabel.Text = CurrentQuestion.Text;
 		ResultLabel.Text = "";
+		AnswerBlueTextEdit.Text = "";
+		AnswerRedTextEdit.Text = "";
 
 		//NowGuessing = QuestionIndex % 2 == 0 ? TeamColor.Blue : TeamColor.Red;
 		
 		GameTimer.Instance.SetTime(120);
 		GameTimer.Instance.Start();
+	}
+	
+	public static double easeOutCubic(double x) {
+		return 1 - Math.Pow(1 - x, 3);
 	}
 }

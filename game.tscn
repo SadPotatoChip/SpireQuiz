@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bfxnj0ob7un7s"]
+[gd_scene load_steps=38 format=3 uid="uid://bfxnj0ob7un7s"]
 
 [ext_resource type="Script" uid="uid://c2x78uvj4yso6" path="res://Scripts/Game.cs" id="1_80nbo"]
 [ext_resource type="AudioStream" uid="uid://daowud1oawcwp" path="res://Sounds/STS_MenuTheme_NewMix_v1.ogg" id="2_7sc4i"]
@@ -30,6 +30,9 @@
 [ext_resource type="Texture2D" uid="uid://e0vqev81f6wp" path="res://Sprites/disabledButton.png" id="22_x5p1p"]
 [ext_resource type="AudioStream" uid="uid://s3rd2vkcuvcq" path="res://Sounds/SOTE_SFX_EndTurn_v2.ogg" id="23_qhcbd"]
 [ext_resource type="AudioStream" uid="uid://cprq22te286vt" path="res://Sounds/STS_SFX_Confused_v2.ogg" id="23_xa8c5"]
+[ext_resource type="Script" uid="uid://bjq7hmmko40ni" path="res://Scripts/Sections/GuessTheNumber/SectionGuessTheNumber.cs" id="24_xex6t"]
+[ext_resource type="AudioStream" uid="uid://dmr6a1t0j8bbl" path="res://Sounds/SOTE_SFX_Wheel_v2.ogg" id="25_iu0sx"]
+[ext_resource type="AudioStream" uid="uid://34cwdgpawdti" path="res://Sounds/SOTE_SFX_Relic_Tingsha.ogg" id="26_4v2jo"]
 [ext_resource type="Texture2D" uid="uid://bwm4v2bcqypif" path="res://Sprites/proceedButton.png" id="27_xa8c5"]
 [ext_resource type="Texture2D" uid="uid://du2f716fmolx6" path="res://Sprites/endTurnButton.png" id="30_082n1"]
 [ext_resource type="Script" uid="uid://o6bng0pv8yis" path="res://Scripts/Sections/FillTheCategory/SectionFillTheCategory.cs" id="30_dhpj7"]
@@ -98,7 +101,7 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 script = ExtResource("16_e8heu")
-Sections = [NodePath("../SectionMultiChoice"), NodePath("../SectionFillTheCategory")]
+Sections = [NodePath("../SectionMultiChoice"), NodePath("../SectionFillTheCategory"), NodePath("../SectionGuessNumber")]
 
 [node name="ButtonClickedSound" type="Node" parent="Camera2D/Game/GamePicker"]
 script = ExtResource("8_mfdv2")
@@ -143,7 +146,7 @@ text = "Guess The Number"
 custom_minimum_size = Vector2(360, 100)
 layout_mode = 2
 theme = ExtResource("3_feb5d")
-text = "Trivia"
+text = "Lightning Round"
 
 [node name="Rules" type="RichTextLabel" parent="Camera2D/Game"]
 custom_minimum_size = Vector2(0, 240)
@@ -592,6 +595,233 @@ offset_bottom = 261.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="SectionGuessNumber" type="Control" parent="Camera2D/Game" node_paths=PackedStringArray("AnswerBlueTextEdit", "AnswerRedTextEdit", "ResultLabel", "FinishAniticpationSound", "StartAniticpationSound", "RulesLabel", "QuestionLabel", "NowGuessingLabel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("24_xex6t")
+AnswerBlueTextEdit = NodePath("BlueTeamGuess")
+AnswerRedTextEdit = NodePath("RedTeamGuess")
+ResultLabel = NodePath("Output")
+FinishAniticpationSound = NodePath("Audio/Finish")
+StartAniticpationSound = NodePath("Audio/Start")
+RulesLabel = NodePath("../Rules")
+QuestionLabel = NodePath("Question")
+NowGuessingLabel = NodePath("NowGuessing")
+
+[node name="Audio" type="Node" parent="Camera2D/Game/SectionGuessNumber"]
+
+[node name="Start" type="Node" parent="Camera2D/Game/SectionGuessNumber/Audio"]
+script = ExtResource("6_hve3p")
+Count = 2
+PitchShift = 0.2
+
+[node name="Sound" type="AudioStreamPlayer" parent="Camera2D/Game/SectionGuessNumber/Audio/Start"]
+stream = ExtResource("25_iu0sx")
+
+[node name="Finish" type="Node" parent="Camera2D/Game/SectionGuessNumber/Audio"]
+script = ExtResource("6_hve3p")
+Count = 2
+PitchShift = 0.2
+
+[node name="Sound" type="AudioStreamPlayer" parent="Camera2D/Game/SectionGuessNumber/Audio/Finish"]
+stream = ExtResource("26_4v2jo")
+
+[node name="Question" type="RichTextLabel" parent="Camera2D/Game/SectionGuessNumber"]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 6.0
+offset_top = 422.0
+offset_right = 6.0
+offset_bottom = 542.0
+grow_horizontal = 2
+mouse_filter = 2
+theme = ExtResource("3_feb5d")
+theme_override_colors/default_color = Color(1, 0.815686, 0, 1)
+theme_override_font_sizes/normal_font_size = 64
+text = "Question Goes Here!"
+horizontal_alignment = 1
+
+[node name="BlueTeamLabel" type="RichTextLabel" parent="Camera2D/Game/SectionGuessNumber"]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 385.0
+offset_top = 889.0
+offset_right = -1171.0
+offset_bottom = 1049.0
+grow_horizontal = 2
+mouse_filter = 2
+theme = ExtResource("3_feb5d")
+theme_override_colors/default_color = Color(0, 1, 1, 1)
+theme_override_font_sizes/normal_font_size = 64
+text = "Blue Team"
+horizontal_alignment = 1
+
+[node name="RedTeamLabel" type="RichTextLabel" parent="Camera2D/Game/SectionGuessNumber"]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 1178.0
+offset_top = 893.0
+offset_right = -378.0
+offset_bottom = 1053.0
+grow_horizontal = 2
+mouse_filter = 2
+theme = ExtResource("3_feb5d")
+theme_override_colors/default_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 64
+text = "Red Team"
+horizontal_alignment = 1
+
+[node name="Exit" type="TextureButton" parent="Camera2D/Game/SectionGuessNumber"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -53.0
+offset_top = -50.0
+offset_right = 459.0
+offset_bottom = 462.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.1, 0.1)
+texture_normal = ExtResource("27_xa8c5")
+
+[node name="NowGuessing" type="RichTextLabel" parent="Camera2D/Game/SectionGuessNumber"]
+visible = false
+custom_minimum_size = Vector2(0, 240)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 941.0
+offset_bottom = 1181.0
+grow_horizontal = 2
+mouse_filter = 2
+theme = ExtResource("3_feb5d")
+theme_override_font_sizes/normal_font_size = 48
+bbcode_enabled = true
+text = "Now Guessing: ???"
+horizontal_alignment = 1
+
+[node name="Output" type="RichTextLabel" parent="Camera2D/Game/SectionGuessNumber"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 598.0
+offset_top = 650.0
+offset_right = -592.0
+offset_bottom = 795.0
+grow_horizontal = 2
+mouse_filter = 2
+theme = ExtResource("3_feb5d")
+theme_override_colors/default_color = Color(1, 0.815686, 0, 1)
+theme_override_font_sizes/normal_font_size = 112
+bbcode_enabled = true
+horizontal_alignment = 1
+
+[node name="NextQButton" type="TextureButton" parent="Camera2D/Game/SectionGuessNumber"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 842.0
+offset_right = 264.0
+offset_bottom = 1098.0
+texture_normal = ExtResource("30_082n1")
+texture_hover = ExtResource("31_xex6t")
+
+[node name="PressedSoundQue" type="Node" parent="Camera2D/Game/SectionGuessNumber/NextQButton"]
+script = ExtResource("6_hve3p")
+Count = 2
+PitchShift = 0.2
+
+[node name="Pressed" type="AudioStreamPlayer" parent="Camera2D/Game/SectionGuessNumber/NextQButton/PressedSoundQue"]
+stream = ExtResource("23_qhcbd")
+
+[node name="Text" type="RichTextLabel" parent="Camera2D/Game/SectionGuessNumber/NextQButton"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 67.0
+offset_top = 99.0
+offset_right = 54.0
+offset_bottom = 162.0
+grow_horizontal = 2
+mouse_filter = 2
+theme = ExtResource("3_feb5d")
+theme_override_font_sizes/normal_font_size = 40
+text = "Next Q"
+
+[node name="SubmitButton" type="TextureButton" parent="Camera2D/Game/SectionGuessNumber"]
+layout_mode = 0
+offset_left = 852.0
+offset_top = 739.0
+offset_right = 1108.0
+offset_bottom = 995.0
+texture_normal = ExtResource("30_082n1")
+texture_hover = ExtResource("31_xex6t")
+
+[node name="PressedSoundQue" type="Node" parent="Camera2D/Game/SectionGuessNumber/SubmitButton"]
+script = ExtResource("6_hve3p")
+Count = 2
+PitchShift = 0.2
+
+[node name="Pressed" type="AudioStreamPlayer" parent="Camera2D/Game/SectionGuessNumber/SubmitButton/PressedSoundQue"]
+stream = ExtResource("23_qhcbd")
+
+[node name="Text" type="RichTextLabel" parent="Camera2D/Game/SectionGuessNumber/SubmitButton"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 67.0
+offset_top = 99.0
+offset_right = 54.0
+offset_bottom = 162.0
+grow_horizontal = 2
+mouse_filter = 2
+theme = ExtResource("3_feb5d")
+theme_override_font_sizes/normal_font_size = 40
+text = "Submit"
+
+[node name="BlueTeamGuess" type="TextEdit" parent="Camera2D/Game/SectionGuessNumber"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 388.0
+offset_top = 266.0
+offset_right = -1171.0
+offset_bottom = 339.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+placeholder_text = "Guess"
+
+[node name="RedTeamGuess" type="TextEdit" parent="Camera2D/Game/SectionGuessNumber"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 1184.0
+offset_top = 264.0
+offset_right = -375.0
+offset_bottom = 337.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+placeholder_text = "Guess"
+
 [node name="SFXFactory" type="Node2D" parent="Camera2D/Game"]
 script = ExtResource("3_dhpj7")
 PlonkText = ExtResource("4_7knny")
@@ -838,7 +1068,9 @@ expand_icon = true
 [connection signal="pressed" from="Camera2D/Game/GamePicker/Button" to="Camera2D/Game/GamePicker/ButtonClickedSound" method="PlayRandomSound"]
 [connection signal="pressed" from="Camera2D/Game/GamePicker/Button2" to="Camera2D/Game/GamePicker" method="CategoryClicked"]
 [connection signal="pressed" from="Camera2D/Game/GamePicker/Button2" to="Camera2D/Game/GamePicker/ButtonClickedSound" method="PlayRandomSound"]
+[connection signal="pressed" from="Camera2D/Game/GamePicker/Button3" to="Camera2D/Game/GamePicker" method="GuessNumberClicked"]
 [connection signal="pressed" from="Camera2D/Game/GamePicker/Button3" to="Camera2D/Game/GamePicker/ButtonClickedSound" method="PlayRandomSound"]
+[connection signal="pressed" from="Camera2D/Game/GamePicker/Button4" to="Camera2D/Game/GamePicker" method="TriviaClicked"]
 [connection signal="pressed" from="Camera2D/Game/GamePicker/Button4" to="Camera2D/Game/GamePicker/ButtonClickedSound" method="PlayRandomSound"]
 [connection signal="pressed" from="Camera2D/Game/SectionMultiChoice/TextureButton" to="Camera2D/Game/SectionMultiChoice/TextureButton/PressedSoundQue" method="Play"]
 [connection signal="pressed" from="Camera2D/Game/SectionMultiChoice/TextureButton" to="Camera2D/Game/SectionMultiChoice" method="AnswerPressed" binds= [0]]
@@ -856,5 +1088,10 @@ expand_icon = true
 [connection signal="pressed" from="Camera2D/Game/SectionFillTheCategory/ValidateButton" to="Camera2D/Game/SectionFillTheCategory/ValidateButton/PressedSoundQue" method="Play"]
 [connection signal="pressed" from="Camera2D/Game/SectionFillTheCategory/NextQButton" to="Camera2D/Game/SectionFillTheCategory" method="NextQButtonPressed"]
 [connection signal="pressed" from="Camera2D/Game/SectionFillTheCategory/NextQButton" to="Camera2D/Game/SectionFillTheCategory/NextQButton/PressedSoundQue" method="Play"]
+[connection signal="pressed" from="Camera2D/Game/SectionGuessNumber/Exit" to="Camera2D/Game/SectionGuessNumber" method="ForceEnd"]
+[connection signal="pressed" from="Camera2D/Game/SectionGuessNumber/NextQButton" to="Camera2D/Game/SectionGuessNumber" method="OnNextQuestionButtonPressed"]
+[connection signal="pressed" from="Camera2D/Game/SectionGuessNumber/NextQButton" to="Camera2D/Game/SectionGuessNumber/NextQButton/PressedSoundQue" method="Play"]
+[connection signal="pressed" from="Camera2D/Game/SectionGuessNumber/SubmitButton" to="Camera2D/Game/SectionGuessNumber" method="OnSubmitButtonPressed"]
+[connection signal="pressed" from="Camera2D/Game/SectionGuessNumber/SubmitButton" to="Camera2D/Game/SectionGuessNumber/SubmitButton/PressedSoundQue" method="Play"]
 [connection signal="pressed" from="Camera2D/UI/Timer/StartTimerBtn" to="Camera2D/UI/Timer" method="Start"]
 [connection signal="pressed" from="Camera2D/UI/Timer/StopTimerBtn" to="Camera2D/UI/Timer" method="Stop"]
