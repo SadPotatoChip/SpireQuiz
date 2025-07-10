@@ -403,7 +403,7 @@ theme = ExtResource("3_feb5d")
 theme_override_font_sizes/normal_font_size = 40
 text = "Begin!"
 
-[node name="SectionFillTheCategory" type="Control" parent="Camera2D/Game" node_paths=PackedStringArray("AnswerTextEdit", "ResultLabel", "RulesLabel", "QuestionLabel", "NowGuessingLabel", "StartButton")]
+[node name="SectionFillTheCategory" type="Control" parent="Camera2D/Game" node_paths=PackedStringArray("AnswerTextEdit", "ResultLabel", "OutputLabel", "RulesLabel", "QuestionLabel", "NowGuessingLabel", "StartButton")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -413,6 +413,7 @@ grow_vertical = 2
 script = ExtResource("30_dhpj7")
 AnswerTextEdit = NodePath("Guesses")
 ResultLabel = NodePath("ResultLabel")
+OutputLabel = NodePath("Output")
 RulesLabel = NodePath("../Rules")
 QuestionLabel = NodePath("Question")
 NowGuessingLabel = NodePath("NowGuessing")
@@ -482,14 +483,30 @@ custom_minimum_size = Vector2(0, 240)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 878.0
-offset_bottom = 1118.0
+offset_top = 941.0
+offset_bottom = 1181.0
 grow_horizontal = 2
 mouse_filter = 2
 theme = ExtResource("3_feb5d")
 theme_override_font_sizes/normal_font_size = 48
 bbcode_enabled = true
 text = "Now Guessing: ???"
+horizontal_alignment = 1
+
+[node name="Output" type="RichTextLabel" parent="Camera2D/Game/SectionFillTheCategory"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 45.0
+offset_top = 812.0
+offset_right = -13.0
+offset_bottom = 932.0
+grow_horizontal = 2
+mouse_filter = 2
+theme = ExtResource("3_feb5d")
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
 horizontal_alignment = 1
 
 [node name="BeginButton" type="TextureButton" parent="Camera2D/Game/SectionFillTheCategory"]

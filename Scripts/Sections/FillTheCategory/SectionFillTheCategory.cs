@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Godot;
+using SpireKnight.Scripts.VisualFlair;
 using SpireQuiz.Scripts.TopBar;
 
 namespace SpireQuiz.Scripts.Sections.FillTheCategory;
@@ -22,6 +24,7 @@ public partial class SectionFillTheCategory: Section
 	
 	[Export] private TextEdit AnswerTextEdit;
 	[Export] private RichTextLabel ResultLabel;
+	[Export] private RichTextLabel OutputLabel;
 
 	#endregion
 	
@@ -58,7 +61,28 @@ public partial class SectionFillTheCategory: Section
 		int correct = 0;
 		int incorrect = 0;
 
+		var answers = AnswerTextEdit.Text.Split(",")
+			.Where( s=> false == string.IsNullOrWhiteSpace(s));
+		var outputText = "";
+		foreach (var a in answers)
+		{
+			var s = a;
+			if (correctAnswers.Contains(FormatAnswer(a)))
+			{
+				correct++;
+				s = s.RichWrapColor(Colors.Green);
+			}
+			else
+			{
+				incorrect++;
+				s = s.RichWrapColor(Colors.Red);
+			}
+			outputText += s + ", ";
+		}
+		OutputLabel.Text = outputText;
 		ResultLabel.Text = $"[color=#00ff00]Correct: {correct * CORRECT_POINTS}[/color] [color=#ff0000]Incorrect: {incorrect * INCORRECT_POINTS}[/color]";
+
+		await GameInformation.Instance.GiveScore(NowGuessing, correct * CORRECT_POINTS + incorrect * INCORRECT_POINTS);
 	}
 
 	private async Task TryLoadNextQuestion()
@@ -73,6 +97,7 @@ public partial class SectionFillTheCategory: Section
 		QuestionLabel.Text = CurrentQuestion.Text;
 		ResultLabel.Text = "";
 		AnswerTextEdit.Text = "";
+		OutputLabel.Text = "";
 
 		NowGuessing = QuestionIndex % 2 == 0 ? TeamColor.Blue : TeamColor.Red;
 		
@@ -85,6 +110,7 @@ public partial class SectionFillTheCategory: Section
 		a = a.ToLower();
 		a = a.Replace(".", "");
 		a = a.Replace("'", "");
+		a = a.Replace(" ", "");
 		return a;
 	}
 	
