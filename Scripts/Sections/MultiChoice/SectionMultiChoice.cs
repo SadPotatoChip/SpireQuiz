@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Godot;
 using SpireKnight.Scripts.Audio;
@@ -11,8 +11,7 @@ public partial class SectionMultiChoice : Section
 {
 	public override SectionType SectionType { get; set; } = SectionType.MultiChoiceQuestions;
 
-	[Export] private RichTextLabel QuestionLabel;
-	[Export] private RichTextLabel NowGuessingLabel;
+
 	[Export] private TextureButton[] AnswerButtons;
 	[Export] private SoundQueue DrumRollSound;
 	[Export] private SoundQueue CorrectSound;
@@ -23,35 +22,25 @@ public partial class SectionMultiChoice : Section
 		$"A correct answer gives {POINT_REWARD} points.\n" +
 		$"An incorrect answer gives the other team a chance to answer (1 minute). Correct answer gives them {POINT_REWARD_OTHER} points!";
 
-	private const int POINT_REWARD = 4;
-	private const int POINT_REWARD_OTHER = 2;
+	private const int POINT_REWARD = 8;
+	private const int POINT_REWARD_OTHER = 4;
 	private int CurrentReward;
 
-	private TeamColor _nowGuessing;
-
-	private TeamColor NowGuessing
-	{
-		get => _nowGuessing;
-		set {
-			_nowGuessing = value;
-			NowGuessingLabel.Text = $"Now Guessing: [color=#{Teams.ColorForTeam[value]}]{value}[/color]";
-		}
-	}
-	private int QuestionIndex;
 	private MultiChoiceQuestion CurrentQuestion;
 	
 	public override async Task Begin()
 	{
 		Visible = true;
 		RulesLabel.Text = Rules;
+		StartButton.Visible = true;
+	}
+
+	public async void StartButtonPressed()
+	{
+		StartButton.Visible = false;
 		QuestionIndex = -1;
 		CurrentQuestion = null;
 		await TryLoadNextQuestion();
-	}
-
-	public override async Task End()
-	{
-		await base.End();
 	}
 
 	private async Task TryLoadNextQuestion()
@@ -72,6 +61,8 @@ public partial class SectionMultiChoice : Section
 			AnswerButtons[i].SelfModulate = new Color(1, 1, 1);
 			AnswerButtons[i].GetChild<RichTextLabel>(1).Text = CurrentQuestion.Answers[i];
 		}
+		GameTimer.Instance.SetTime(120);
+		GameTimer.Instance.Start();
 	}
 
 	public async void AnswerPressed(int index)
@@ -114,6 +105,8 @@ public partial class SectionMultiChoice : Section
 		{
 			CurrentReward = POINT_REWARD_OTHER;
 			NowGuessing = Teams.Other(NowGuessing);
+			GameTimer.Instance.SetTime(60);
+			GameTimer.Instance.Start();
 		}
 		else
 		{

@@ -69,6 +69,21 @@ public partial class GameTimer : Control
 		Finish();
 	}
 	
+	public void SetTime(int s)
+	{
+		s = Math.Max(s, 0);
+		
+		if (s < 60)
+		{
+			TimerText.Text = s.ToString();
+		}
+		else
+		{
+			TimerText.Text = (s/60) +":"+ (s%60);
+		}
+		
+	}
+	
 	private void Finish()
 	{
 		IsRunning = false;
@@ -88,21 +103,6 @@ public partial class GameTimer : Control
 		}
 		
 		SetTime(t-1);
-		
-	}
-
-	public void SetTime(int s)
-	{
-		s = Math.Max(s, 0);
-		
-		if (s < 60)
-		{
-			TimerText.Text = s.ToString();
-		}
-		else
-		{
-			TimerText.Text = (s/60) +":"+ (s%60);
-		}
 		
 	}
 }
