@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://bfxnj0ob7un7s"]
+[gd_scene load_steps=44 format=3 uid="uid://bfxnj0ob7un7s"]
 
 [ext_resource type="Script" uid="uid://c2x78uvj4yso6" path="res://Scripts/Game.cs" id="1_80nbo"]
 [ext_resource type="AudioStream" uid="uid://daowud1oawcwp" path="res://Sounds/STS_MenuTheme_NewMix_v1.ogg" id="2_7sc4i"]
@@ -17,8 +17,10 @@
 [ext_resource type="Script" uid="uid://cyvt8g2045esi" path="res://Scripts/Audio/SoundPool.cs" id="8_mfdv2"]
 [ext_resource type="AudioStream" uid="uid://c8faya4b8nl8e" path="res://Sounds/STS_VO_CrowCultist_1b.ogg" id="10_iotsf"]
 [ext_resource type="AudioStream" uid="uid://l0sskefte2q3" path="res://Sounds/STS_VO_CrowCultist_1c.ogg" id="11_lc2xo"]
+[ext_resource type="Texture2D" uid="uid://dnvteg7f2j642" path="res://Sprites/buttonLRed.png" id="13_4v2jo"]
 [ext_resource type="AudioStream" uid="uid://c775hhlre160m" path="res://Sounds/STS_VO_Merchant_Mlyah_a.ogg" id="13_215e1"]
 [ext_resource type="AudioStream" uid="uid://d0t3oiihxmr5e" path="res://Sounds/STS_VO_Merchant_Mlyah_c.ogg" id="14_7sc4i"]
+[ext_resource type="Texture2D" uid="uid://n0r5qscxhee4" path="res://Sprites/zap_particle.png" id="14_l1i01"]
 [ext_resource type="Script" uid="uid://bmnfxbniudq0i" path="res://Scripts/Sections/SectionPicker.cs" id="16_e8heu"]
 [ext_resource type="AudioStream" uid="uid://dxc38h21w5ktj" path="res://Sounds/SOTE_SFX_Buff_1_v1.ogg" id="17_e36ub"]
 [ext_resource type="AudioStream" uid="uid://c76o0ukiwukq6" path="res://Sounds/SOTE_SFX_Buff_2_v1.ogg" id="18_hb5m1"]
@@ -37,6 +39,29 @@
 [ext_resource type="Texture2D" uid="uid://du2f716fmolx6" path="res://Sprites/endTurnButton.png" id="30_082n1"]
 [ext_resource type="Script" uid="uid://o6bng0pv8yis" path="res://Scripts/Sections/FillTheCategory/SectionFillTheCategory.cs" id="30_dhpj7"]
 [ext_resource type="Texture2D" uid="uid://dafj1pfceehg" path="res://Sprites/endTurnButtonGlow.png" id="31_xex6t"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_r62pu"]
+particles_animation = true
+particles_anim_h_frames = 5
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id="Curve_l1i01"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.0612903, 0), 0.0, 0.0, 0, 0, Vector2(0.0967742, 1), 0.0, 0.0, 0, 0, Vector2(0.377419, 0.874828), 0.0, 0.0, 0, 0, Vector2(0.458065, 0), 0.0, 0.0, 0, 0, Vector2(0.53871, 1), 0.0, 0.0, 0, 0]
+point_count = 6
+
+[sub_resource type="CurveTexture" id="CurveTexture_r62pu"]
+curve = SubResource("Curve_l1i01")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_klri6"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(100, 30, 1)
+angle_min = -720.0
+angle_max = 720.0
+gravity = Vector3(0, 0, 0)
+alpha_curve = SubResource("CurveTexture_r62pu")
+anim_offset_max = 1.0
 
 [node name="Game" type="Node2D" node_paths=PackedStringArray("SectionPicker")]
 script = ExtResource("1_80nbo")
@@ -87,7 +112,6 @@ text = "Quiz The Spire"
 [node name="Game" type="CanvasLayer" parent="Camera2D"]
 
 [node name="GamePicker" type="HBoxContainer" parent="Camera2D/Game" node_paths=PackedStringArray("Sections")]
-visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -124,29 +148,100 @@ script = ExtResource("6_hve3p")
 [node name="Finish" type="AudioStreamPlayer" parent="Camera2D/Game/GamePicker/ButtonClickedSound/SoundQueue3"]
 stream = ExtResource("19_x5p1p")
 
-[node name="Button" type="Button" parent="Camera2D/Game/GamePicker"]
-custom_minimum_size = Vector2(360, 100)
+[node name="Button" type="TextureButton" parent="Camera2D/Game/GamePicker"]
+custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 theme = ExtResource("3_feb5d")
-text = "Multi Choice Questions"
+texture_normal = ExtResource("13_4v2jo")
 
-[node name="Button2" type="Button" parent="Camera2D/Game/GamePicker"]
-custom_minimum_size = Vector2(360, 100)
-layout_mode = 2
+[node name="PointsLabel" type="Label" parent="Camera2D/Game/GamePicker/Button"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -98.5
+offset_top = 37.0
+offset_right = 94.5
+offset_bottom = 98.0
+grow_horizontal = 2
 theme = ExtResource("3_feb5d")
-text = "Fill The Category"
+theme_override_font_sizes/font_size = 48
+text = "Questions"
+horizontal_alignment = 1
 
-[node name="Button3" type="Button" parent="Camera2D/Game/GamePicker"]
-custom_minimum_size = Vector2(360, 100)
+[node name="Button2" type="TextureButton" parent="Camera2D/Game/GamePicker"]
+custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 theme = ExtResource("3_feb5d")
-text = "Guess The Number"
+texture_normal = ExtResource("13_4v2jo")
 
-[node name="Button4" type="Button" parent="Camera2D/Game/GamePicker"]
-custom_minimum_size = Vector2(360, 100)
+[node name="PointsLabel2" type="Label" parent="Camera2D/Game/GamePicker/Button2"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -104.5
+offset_top = 38.0
+offset_right = 101.5
+offset_bottom = 99.0
+grow_horizontal = 2
+theme = ExtResource("3_feb5d")
+theme_override_font_sizes/font_size = 48
+text = "Categories"
+horizontal_alignment = 1
+
+[node name="Button3" type="TextureButton" parent="Camera2D/Game/GamePicker"]
+custom_minimum_size = Vector2(300, 100)
 layout_mode = 2
 theme = ExtResource("3_feb5d")
-text = "Lightning Round"
+texture_normal = ExtResource("13_4v2jo")
+
+[node name="PointsLabel3" type="Label" parent="Camera2D/Game/GamePicker/Button3"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -104.5
+offset_top = 38.0
+offset_right = 101.5
+offset_bottom = 99.0
+grow_horizontal = 2
+theme = ExtResource("3_feb5d")
+theme_override_font_sizes/font_size = 42
+text = "Aproximate"
+horizontal_alignment = 1
+
+[node name="Button4" type="TextureButton" parent="Camera2D/Game/GamePicker"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+theme = ExtResource("3_feb5d")
+texture_normal = ExtResource("13_4v2jo")
+
+[node name="PointsLabel3" type="Label" parent="Camera2D/Game/GamePicker/Button4"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -101.5
+offset_top = 26.0
+offset_right = 104.5
+offset_bottom = 113.0
+grow_horizontal = 2
+theme = ExtResource("3_feb5d")
+theme_override_font_sizes/font_size = 32
+text = "Lightning
+Round"
+horizontal_alignment = 1
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="Camera2D/Game/GamePicker/Button4"]
+visible = false
+z_index = 10
+material = SubResource("CanvasItemMaterial_r62pu")
+position = Vector2(156, 58)
+amount = 1
+texture = ExtResource("14_l1i01")
+lifetime = 0.3
+process_material = SubResource("ParticleProcessMaterial_klri6")
 
 [node name="Rules" type="RichTextLabel" parent="Camera2D/Game"]
 custom_minimum_size = Vector2(0, 240)
