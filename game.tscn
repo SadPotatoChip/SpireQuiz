@@ -404,6 +404,7 @@ theme_override_font_sizes/normal_font_size = 40
 text = "Begin!"
 
 [node name="SectionFillTheCategory" type="Control" parent="Camera2D/Game" node_paths=PackedStringArray("AnswerTextEdit", "ResultLabel", "OutputLabel", "RulesLabel", "QuestionLabel", "NowGuessingLabel", "StartButton")]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

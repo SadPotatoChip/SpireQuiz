@@ -9,13 +9,13 @@ namespace SpireQuiz.Scripts.Sections.FillTheCategory;
 public partial class SectionFillTheCategory: Section
 {
 	public override SectionType SectionType { get; set; } = SectionType.FillTheCategory;
-	protected override string Rules => "Team members take turns guessing an item which fits into the displayed category by typing it in the Discord Chat!\n" +
+	protected override string Rules => "Team members take turns guessing an item which fits into the displayed category!\n" +
 	                                   $"At the end, correct guesses give {CORRECT_POINTS} points, incorrect ones give {INCORRECT_POINTS}\n" +
 	                                   "The team has 3 minutes.";
 
 	#region Constants
 
-	private int CORRECT_POINTS = 1;
+	private int CORRECT_POINTS = 2;
 	private int INCORRECT_POINTS = -1;
 
 	#endregion
