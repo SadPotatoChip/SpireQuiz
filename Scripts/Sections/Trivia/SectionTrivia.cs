@@ -41,12 +41,17 @@ public partial class SectionTrivia : Section
 		QuestionIndex = -1;
 		CurrentQuestion = null;
 		NowGuessing = TeamColor.Red;
+		GameTimer.Instance.SetTime(240);
+		GameTimer.Instance.Start();
 		await TryLoadNextQuestion();
 	}
 
 	public async void NextTeamButtonPressed()
 	{
 		NowGuessing = Teams.Other(NowGuessing);
+		await TryLoadNextQuestion();
+		GameTimer.Instance.SetTime(240);
+		GameTimer.Instance.Start();
 	}
 
 	public async void WrongButtonPressed()
@@ -70,17 +75,15 @@ public partial class SectionTrivia : Section
 	private async Task TryLoadNextQuestion()
 	{
 		var unanswered = AllQuestions.Where(q => q.Answered == false);
-		var min = unanswered.Min(q => q.TimesAppeared);
-		CurrentQuestion = unanswered.FirstOrDefault(q => q.TimesAppeared == min);
-		if (CurrentQuestion == null)
+		if (unanswered.Count() == 0)
 		{
 			await End();
 			return;
 		}
+		var min = unanswered.Min(q => q.TimesAppeared);
+		CurrentQuestion = unanswered.FirstOrDefault(q => q.TimesAppeared == min);
 		CurrentQuestion.TimesAppeared++;
 		
 		QuestionLabel.Text = CurrentQuestion.Text;
-		GameTimer.Instance.SetTime(240);
-		GameTimer.Instance.Start();
 	}
 }
