@@ -30,6 +30,7 @@ public abstract partial class Section : Control
 	{
 		Visible = false;
 		Game.Instance.SectionPicker.Visible = true;
+		RulesLabel.Text = "";
 	}
 	
 	public async void ForceEnd()

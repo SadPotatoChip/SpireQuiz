@@ -11,7 +11,6 @@ public partial class SectionMultiChoice : Section
 {
 	public override SectionType SectionType { get; set; } = SectionType.MultiChoiceQuestions;
 
-
 	[Export] private TextureButton[] AnswerButtons;
 	[Export] private SoundQueue DrumRollSound;
 	[Export] private SoundQueue CorrectSound;
