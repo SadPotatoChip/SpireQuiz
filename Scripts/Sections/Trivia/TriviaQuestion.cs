@@ -73,7 +73,7 @@ public class TriviaQuestion
 		"62.    What is the only event that can change the visuals of the background?",
 		"63.    How many cards are on offer when you first enter a shop?",
 		"64.    What is the meaning of the word “exordium”",
-		"65.    In the Joust event, what is the name of the Knigtht’s pet?"
+		"65.    In the Joust event, what is the name of the Knight’s pet?"
 	};
 	
 	public static implicit operator TriviaQuestion(string s) => new TriviaQuestion(s);

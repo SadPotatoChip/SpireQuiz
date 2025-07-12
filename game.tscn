@@ -73,7 +73,7 @@ script = ExtResource("2_xfvwf")
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_7sc4i")
-volume_db = -31.431
+volume_db = -40.098
 autoplay = true
 
 [node name="GameStartSound" type="AudioStreamPlayer" parent="."]
@@ -962,6 +962,7 @@ PitchShift = 0.2
 stream = ExtResource("23_xa8c5")
 
 [node name="Question" type="RichTextLabel" parent="Camera2D/Game/SectionTrivia"]
+clip_contents = false
 custom_minimum_size = Vector2(0, 240)
 layout_mode = 1
 anchors_preset = 10
@@ -969,13 +970,14 @@ anchor_right = 1.0
 offset_left = 6.0
 offset_top = 422.0
 offset_right = 6.0
-offset_bottom = 662.0
+offset_bottom = 682.0
 grow_horizontal = 2
 mouse_filter = 2
 theme = ExtResource("3_feb5d")
 theme_override_colors/default_color = Color(1, 0.815686, 0, 1)
-theme_override_font_sizes/normal_font_size = 64
+theme_override_font_sizes/normal_font_size = 60
 text = "Question Goes Here!"
+scroll_active = false
 horizontal_alignment = 1
 
 [node name="Exit" type="TextureButton" parent="Camera2D/Game/SectionTrivia"]
